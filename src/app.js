@@ -6,11 +6,12 @@ const openStream = require('./openStream');
 const playVideo = require('./playVideo');
 const io = require('socket.io-client');
 
-console.log(io)
 
-const socket = io('https://livestream1205.herokuapp.com/');
+const socket = io('https://livestream1405.herokuapp.com/');
 
+//const socket = io('http://localhost:3005')
 
+console.log(socket)
 function getPeer()
 {
     const id = uid(10);
@@ -29,10 +30,13 @@ const peer = new Peer(peerId,config);
 });
 */
 
+const arrMsg=[];
+
 socket.emit('NEW_PEER_ID',peerId);
 socket.on('ONLINE_PEER_ARRAY', arrPeerId=>{
       arrPeerId.forEach(id => {
-          $('#ulPeerId').append(`<li id="${id}">${id}</li>`);
+        $('#ulchat').append(`<p class="user-joined">${id} joined</p>`);
+        $('#ulPeerId').append(`<li id="${id}">${id}</li>`);
       });
 })
 
@@ -40,7 +44,10 @@ socket.on('SOMEONE_DISCONNECTED', peerId => {
     $(`#${peerId}`).remove();
 });
 
-socket.on('NEW_CLIENT_CONNECT', id => $('#ulPeerId').append(`<li id="${id}">${id}</li>`));
+socket.on('NEW_CLIENT_CONNECT', id => {
+    $('#ulchat').append(`<p class="user-joined">${id} joined</p>`);
+    $('#ulPeerId').append(`<li id="${id}">${id}</li>`);
+});
   
 var numberid = 0;
 $('#ulPeerId').on('click','li',function(){
@@ -60,7 +67,6 @@ $('#ulPeerId').on('click','li',function(){
         });
 });
 
-
 peer.on('call', (call) => {
     var friendStream = numberid.toString();
     var video = document.createElement("video");
@@ -75,6 +81,41 @@ peer.on('call', (call) => {
         call.on('stream',remoteStream => playVideo(remoteStream,friendStream));
         });
   });
+
+$('#submit-msg').on('click', function(){
+    var arrmsg=[]
+    let msg1 = document.getElementById("enter-msg").value;
+    arrmsg.push(msg1);
+    arrmsg.push(peerId);
+    socket.emit("Client-send-data",arrmsg);
+})
+
+socket.on("Server-send-data",function(data){
+
+    document.getElementById("enter-msg").value ="";
+    var div = document.createElement("div")
+    var p1 = document.createElement("p");
+    if(data[1]==peerId)
+    {
+        p1.innerHTML="You";
+        div.setAttribute('class',"You-join");
+    }
+    else
+    {
+        p1.innerHTML=data[1];
+        div.setAttribute('class',"Other-join");
+
+    }
+    var p2 = document.createElement("p");
+    p1.setAttribute('class','joiner-name')
+    p2.setAttribute('class','msg-content')
+    p2.innerHTML = data[0];
+    div.appendChild(p1);
+    div.appendChild(p2);
+    $('#ulchat').append(div);
+})
+
+
 
 
 

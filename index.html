@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/app.css">
     <link rel="stylesheet" href="/fontawesome/css/all.css"> 
     <!--<h3 id="peer-id">Your peer id: </h3>-->
-    <div class="main">
+    <div class="main" id="main">
         <div class="display-video">
             <div id="video">
                 <video id="localStream" width="930" height="500" controls></video>
@@ -22,10 +22,8 @@
             <div class="online-us">
                 <h3>Online Users</h3>
             </div>
-            <ul id="ulPeerId"> 
-        </div>
-        <div id="display-chat" class="display-chat">
-
+            <div id="ulPeerId"> 
+            </div>
         </div>
         <div class="button">
             <div class="show-hide-users">
@@ -35,10 +33,22 @@
                 <i onclick="show_hide_chat()" class="fas fa-comment-dots fa-2x"></i>
             </div>
         </div>
-        <script src="ShowHideElements.js"></script>
+        <div class="chatabc">
+        <div id="display-chat" class="display-chat">
+        <div class="form">
+            <ul id="ulchat"> 
+            </ul>
+            <div class="senMess">
+            <button class="send" id ="submit-msg" ><i class="fa fa-paper-plane"></i></button>
+            <textarea id="enter-msg" name="" cols="20" rows="3" placeholder="enter your message"></textarea>
+        </div>
+        </div>
+         </div>
+            <!--<input class="enter-msg" id="enter-msg" placeholder="Your message here...">-->
     </div>
-
-    </ul>
+    </div>
+    </div>
+    <script src="ShowHideElements.js"></script>
 </body>
-<script src="dist/bundle.js"></script>
+<script src="/dist/bundle.js"></script>
 </html>
